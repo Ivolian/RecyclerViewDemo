@@ -18,7 +18,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     /**
      * ViewHolder
      * 1. 为 itemView 中 views 添加事件。
-     * 2. 持有 itemsViews 中 views 的引用。
+     * 2. 持有 itemsView 中 views 的引用。
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("result", "view " + number + " is been clicked.");
+                    Log.e("result", "TextView " + number + " is been clicked.");
                 }
             });
 
@@ -57,7 +57,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     /**
      * onCreateViewHolder
-     * 创建 itemView 时调用，每个 itemView 有一个 ViewHolder 持有引用。
+     * 创建 itemView 时调用，每个 itemView 由一个 ViewHolder 持有引用。
      * 如果一屏幕能展示 13 itemView，那么调用该函数最多 17 次。
      * 如果一屏幕能展示 6 itemView，那么调用该函数最对 10 次。
      * 即上下各预留两个。
@@ -73,7 +73,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     /**
      * onBindViewHolder
-     * 设置(viewHolder刚创建时)或替换(viewHolder复用时) itemView 中 views 的值。
+     * 设置(viewHolder创建时)或替换(viewHolder复用时) itemView 中 views 的值。
      */
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
@@ -88,12 +88,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     /**
-       ViewHolder 被复用。
+     * ViewHolder 被复用。
      */
     @Override
     public void onViewRecycled(ViewHolder viewHolder) {
+
+        // Log.e("result", "onViewRecycled " + viewHolder.number);
         super.onViewRecycled(viewHolder);
-//        Log.e("result", "onViewRecycled " + viewHolder.number);
     }
 
 }
