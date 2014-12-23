@@ -2,6 +2,7 @@ package com.example.administrator.recyclerviewdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -18,7 +19,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(getVerticalLinearLayoutManager());
+        recyclerView.setLayoutManager(getGridLayoutManager());
         recyclerView.setAdapter(new MyAdapter(getDataList()));
     }
 
@@ -27,6 +28,11 @@ public class MainActivity extends Activity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         return linearLayoutManager;
+    }
+
+    private GridLayoutManager getGridLayoutManager(){
+
+      return new GridLayoutManager(this,2);
     }
 
     private List<String> getDataList() {

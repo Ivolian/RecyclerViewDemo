@@ -12,7 +12,6 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
-
     private List<String> dataList;
 
     /**
@@ -68,6 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
 
+//        Log.e("result", "onBindViewHolder " + ViewHolder.count);
         return new ViewHolder(v);
     }
 
