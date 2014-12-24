@@ -15,19 +15,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<String> dataList;
 
     /**
-     * ViewHolder
+     * You can do sth in ViewHolder.
      * 1. 为 itemView 中 views 添加事件。
      * 2. 持有 itemsView 中 views 的引用。
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView textView;
-
-        // 记录多少个 ViewHolder 被创建
+        // 记录多少个 ViewHolder 被创建。
         public static int count = 0;
 
-        // 每个 ViewHolder 的序号
-        private int number;
+        // 每个 ViewHolder 的序号。
+        public int number;
+
+        public final TextView textView;
 
         public ViewHolder(View v) {
             super(v);
@@ -35,6 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             count++;
             number = count;
 
+            // 1 添加事件
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -42,12 +43,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 }
             });
 
+            // 2 持有引用
             textView = (TextView) v.findViewById(R.id.textView);
         }
 
-        public TextView getTextView() {
-            return textView;
-        }
     }
 
     public MyAdapter(List<String> dataList) {
@@ -57,8 +56,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     /**
      * onCreateViewHolder
      * 创建 itemView 时调用，每个 itemView 由一个 ViewHolder 持有引用。
-     * 如果一屏幕能展示 13 itemView，那么调用该函数最多 17 次。
-     * 如果一屏幕能展示 6 itemView，那么调用该函数最对 10 次。
+     * 如果一屏幕能展示 13 itemView，那么调用该函数至多 17 次。
+     * 如果一屏幕能展示 6 itemView，那么调用该函数至多 10 次。
      * 即上下各预留两个。
      */
     @Override
@@ -73,13 +72,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     /**
      * onBindViewHolder
-     * 设置(viewHolder创建时)或替换(viewHolder复用时) itemView 中 views 的值。
+     * 设置(viewHolder创建时) 或替换(viewHolder复用时) itemView 中 views 的值。
      */
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
 //        Log.e("result", "onBindViewHolder " + viewHolder.number);
-        viewHolder.getTextView().setText(dataList.get(position));
+        viewHolder.textView.setText(dataList.get(position));
     }
 
     @Override
