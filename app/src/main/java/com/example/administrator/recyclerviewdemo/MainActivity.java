@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setLayoutManager(getStaggeredGridLayoutManager());
+        recyclerView.setLayoutManager(getLinearLayoutManager());
         recyclerView.setAdapter(new MyAdapter(getDataList()));
     }
 
