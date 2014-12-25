@@ -3,7 +3,6 @@ package com.example.administrator.recyclerviewdemo;
 import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ViewHolder> {
 
     private static int[] colors;
 
@@ -63,8 +62,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String text = "ItemView " + number + " is been clicked.";
-                    Log.e("result", text);
+                    // to do sth
                 }
             });
 
@@ -75,7 +73,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     }
 
-    public MyAdapter(List<String> dataList) {
+    public ItemViewAdapter(List<String> dataList) {
 
         this.dataList = dataList;
     }
@@ -105,7 +103,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
 //        Log.e("result", "onBindViewHolder " + viewHolder.number);
-        viewHolder.cardView.setCardElevation(position);
+//        viewHolder.cardView.setCardElevation(position);
         viewHolder.cardView.setRadius(position);
         viewHolder.cardView.setCardBackgroundColor(getRandomColorValue());
         viewHolder.textView.setText(dataList.get(position));
@@ -129,15 +127,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private int getRandomColorValue() {
 
         return colors[new Random().nextInt(10)];
-    }
-
-    private int getWhiteColorValue() {
-
-        return Resources.getSystem().getColor(android.R.color.white);
-    }
-
-    public List<String> getDataList() {
-        return dataList;
     }
 
     public void setDataList(List<String> dataList) {

@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class MainActivity extends Activity {
 
-    private MyAdapter myAdapter;
+    private ItemViewAdapter itemViewAdapter;
 
     private RecyclerView recyclerView;
 
@@ -35,8 +35,8 @@ public class MainActivity extends Activity {
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(getLinearLayoutManager());
-        myAdapter = new MyAdapter(getDataList());
-        recyclerView.setAdapter(myAdapter);
+        itemViewAdapter = new ItemViewAdapter(getDataList());
+        recyclerView.setAdapter(itemViewAdapter);
     }
 
     private LinearLayoutManager getLinearLayoutManager() {
@@ -46,10 +46,10 @@ public class MainActivity extends Activity {
         return linearLayoutManager;
     }
 
-    private GridLayoutManager getGridLayoutManager() {
-
-        return new GridLayoutManager(this, 2);
-    }
+//    private GridLayoutManager getGridLayoutManager() {
+//
+//        return new GridLayoutManager(this, 2);
+//    }
 
     private List<String> getDataList() {
 
@@ -63,8 +63,8 @@ public class MainActivity extends Activity {
 
     private void refreshDataList() {
 
-        myAdapter.setDataList(getDataList());
-        recyclerView.swapAdapter(myAdapter,false);
+        itemViewAdapter.setDataList(getDataList());
+        recyclerView.swapAdapter(itemViewAdapter,false);
     }
 
     @Override
