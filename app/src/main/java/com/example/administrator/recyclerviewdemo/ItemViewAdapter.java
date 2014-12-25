@@ -124,7 +124,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ViewHo
         super.onViewRecycled(viewHolder);
     }
 
-    private int getRandomColorValue() {
+    public static int getRandomColorValue() {
 
         return colors[new Random().nextInt(10)];
     }

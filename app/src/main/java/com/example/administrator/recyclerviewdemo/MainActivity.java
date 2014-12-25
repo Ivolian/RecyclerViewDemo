@@ -2,7 +2,8 @@ package com.example.administrator.recyclerviewdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -26,11 +27,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initRecyclerView();
+        initSwipeRefreshLayout();
     }
 
     private void initRecyclerView() {
 
-         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
@@ -39,17 +41,34 @@ public class MainActivity extends Activity {
         recyclerView.setAdapter(itemViewAdapter);
     }
 
+    private void initSwipeRefreshLayout() {
+
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_blue_light,
+                android.R.color.holo_blue_dark
+        );
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshDataList();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        });
+    }
+
     private LinearLayoutManager getLinearLayoutManager() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         return linearLayoutManager;
     }
-
-//    private GridLayoutManager getGridLayoutManager() {
-//
-//        return new GridLayoutManager(this, 2);
-//    }
 
     private List<String> getDataList() {
 
@@ -64,7 +83,7 @@ public class MainActivity extends Activity {
     private void refreshDataList() {
 
         itemViewAdapter.setDataList(getDataList());
-        recyclerView.swapAdapter(itemViewAdapter,false);
+        recyclerView.swapAdapter(itemViewAdapter, false);
     }
 
     @Override
