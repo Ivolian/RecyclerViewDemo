@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -16,6 +17,8 @@ import java.util.Random;
 
 
 public class MainActivity extends Activity {
+
+    private Boolean isLinearLayoutManager = null;
 
     private ItemViewAdapter itemViewAdapter;
 
@@ -39,6 +42,7 @@ public class MainActivity extends Activity {
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(getVerticalLinearLayoutManager());
+        isLinearLayoutManager = true;
         itemViewAdapter = new ItemViewAdapter(getRandomDataList());
         recyclerView.setAdapter(itemViewAdapter);
     }
@@ -59,11 +63,27 @@ public class MainActivity extends Activity {
         });
     }
 
+    private void changeLayoutManager() {
+
+        RecyclerView.LayoutManager layoutManager = isLinearLayoutManager ? getGridLayoutManager() : getVerticalLinearLayoutManager();
+        isLinearLayoutManager = !isLinearLayoutManager;
+
+        int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.scrollToPosition(position);
+    }
+
     private LinearLayoutManager getVerticalLinearLayoutManager() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         return linearLayoutManager;
+    }
+
+    private GridLayoutManager getGridLayoutManager() {
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        return gridLayoutManager;
     }
 
     private void onRefresh() {
@@ -88,7 +108,7 @@ public class MainActivity extends Activity {
         List<String> dataList = new ArrayList<>();
         int number = new Random().nextInt(10);
         for (int i = 0; i != 20; i++) {
-            dataList.add("item " + number);
+            dataList.add("item " + i + "." + number);
         }
         return dataList;
     }
@@ -112,6 +132,9 @@ public class MainActivity extends Activity {
                     swipeRefreshLayout.setRefreshing(true);
                     onRefresh();
                 }
+                return true;
+            case R.id.action_change_layout:
+                changeLayoutManager();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

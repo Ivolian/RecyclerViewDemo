@@ -4,4 +4,8 @@
         android:id="@+id/action_refresh"
         android:title="Refresh"
        />
+    <item
+        android:id="@+id/action_change_layout"
+        android:title="Change Layout"
+        />
 </menu>
