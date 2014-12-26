@@ -1,5 +1,5 @@
 RecyclerViewDemo
 ================
 This is a demo about recycler view.
-About how it recycles.
-And use of cardView.
+>
+And it's stronger than the google's example.
