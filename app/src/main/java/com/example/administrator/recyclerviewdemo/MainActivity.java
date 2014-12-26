@@ -21,6 +21,8 @@ public class MainActivity extends Activity {
 
     private RecyclerView recyclerView;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -36,14 +38,14 @@ public class MainActivity extends Activity {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(getLinearLayoutManager());
-        itemViewAdapter = new ItemViewAdapter(getDataList());
+        recyclerView.setLayoutManager(getVerticalLinearLayoutManager());
+        itemViewAdapter = new ItemViewAdapter(getRandomDataList());
         recyclerView.setAdapter(itemViewAdapter);
     }
 
     private void initSwipeRefreshLayout() {
 
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_light,
@@ -52,25 +54,36 @@ public class MainActivity extends Activity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshDataList();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 3000);
+                MainActivity.this.onRefresh();
             }
         });
     }
 
-    private LinearLayoutManager getLinearLayoutManager() {
+    private LinearLayoutManager getVerticalLinearLayoutManager() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         return linearLayoutManager;
     }
 
-    private List<String> getDataList() {
+    private void onRefresh() {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshList();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }, 3000);
+    }
+
+    private void refreshList() {
+
+        itemViewAdapter.setDataList(getRandomDataList());
+        itemViewAdapter.notifyDataSetChanged();
+    }
+
+    private List<String> getRandomDataList() {
 
         List<String> dataList = new ArrayList<>();
         int number = new Random().nextInt(10);
@@ -80,11 +93,7 @@ public class MainActivity extends Activity {
         return dataList;
     }
 
-    private void refreshDataList() {
-
-        itemViewAdapter.setDataList(getDataList());
-        recyclerView.swapAdapter(itemViewAdapter, false);
-    }
+    // ========================= Menu =========================
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,7 +108,10 @@ public class MainActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                refreshDataList();
+                if (!swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(true);
+                    onRefresh();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

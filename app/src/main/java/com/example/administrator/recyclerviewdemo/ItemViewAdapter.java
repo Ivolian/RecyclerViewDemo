@@ -130,6 +130,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ViewHo
     }
 
     public void setDataList(List<String> dataList) {
+
         this.dataList = dataList;
     }
 
