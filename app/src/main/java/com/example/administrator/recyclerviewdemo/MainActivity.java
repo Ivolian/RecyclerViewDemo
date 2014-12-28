@@ -1,6 +1,7 @@
 package com.example.administrator.recyclerviewdemo;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -19,7 +20,11 @@ import java.util.Random;
 
 public class MainActivity extends Activity {
 
+    private int[] colors;
+
     private Boolean isLinearLayout = true;
+
+    private List<Model> modelList = null;
 
     private ItemViewAdapter itemViewAdapter;
 
@@ -33,8 +38,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             isLinearLayout = savedInstanceState.getBoolean("isLinearLayout");
+            modelList = (List) savedInstanceState.getSerializable("modelList");
         }
         setContentView(R.layout.activity_main);
+        initColors();
         initRecyclerView();
         initSwipeRefreshLayout();
     }
@@ -46,17 +53,17 @@ public class MainActivity extends Activity {
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(isLinearLayout ? getLinearLayoutManager() : getGridLayoutManager());
-        itemViewAdapter = new ItemViewAdapter(getRandomDataList());
+        itemViewAdapter = new ItemViewAdapter(this, modelList == null ? getModelList() : modelList);
         recyclerView.setAdapter(itemViewAdapter);
+
     }
 
     private void initSwipeRefreshLayout() {
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(
-                android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_light,
-                android.R.color.holo_blue_dark
+                android.R.color.holo_blue_bright
         );
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -81,15 +88,15 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
+
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
+
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 if (!swipeRefreshLayout.isRefreshing()) {
@@ -111,27 +118,26 @@ public class MainActivity extends Activity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
 
         outState.putBoolean("isLinearLayout", isLinearLayout);
+        outState.putSerializable("modelList", (ArrayList) itemViewAdapter.getModelList());
+        // 这句使得 recycler 的 position 不会因为旋转屏幕而变化。
         super.onSaveInstanceState(outState);
     }
 
-    // ========================= level2 functions =========================
+    // ========================= functions =========================
 
     private void refreshList() {
 
-        itemViewAdapter.setDataList(getRandomDataList());
+        itemViewAdapter.setModelList(getModelList());
         itemViewAdapter.notifyDataSetChanged();
     }
 
     private void changeRecyclerViewLayout() {
 
         int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-        RecyclerView.LayoutManager layoutManager = isLinearLayout ? getGridLayoutManager() : getLinearLayoutManager();
-        isLinearLayout = !isLinearLayout;
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(isLinearLayout ? getGridLayoutManager() : getLinearLayoutManager());
         recyclerView.scrollToPosition(position);
+        isLinearLayout = !isLinearLayout;
     }
-
-    // ========================= level1(basic) functions =========================
 
     private LinearLayoutManager getLinearLayoutManager() {
 
@@ -145,14 +151,36 @@ public class MainActivity extends Activity {
         return new GridLayoutManager(this, 2);
     }
 
-    private List<String> getRandomDataList() {
+    private List<Model> getModelList() {
 
-        List<String> dataList = new ArrayList<>();
-        int number = new Random().nextInt(10);
-        for (int i = 0; i != 40; i++) {
-            dataList.add("item " + i + "." + number);
+        List<Model> modelList = new ArrayList<>();
+        for (int i = 0; i != 20; i++) {
+            modelList.add(new Model(getRandomColor(), i + 1));
         }
-        return dataList;
+
+        return modelList;
+    }
+
+    public int getRandomColor() {
+
+        return colors[new Random().nextInt(10)];
+    }
+
+    private void initColors() {
+
+        final Resources resources = Resources.getSystem();
+        colors = new int[]{
+                resources.getColor(android.R.color.holo_blue_bright),
+                resources.getColor(android.R.color.holo_blue_dark),
+                resources.getColor(android.R.color.holo_blue_light),
+                resources.getColor(android.R.color.holo_green_dark),
+                resources.getColor(android.R.color.holo_green_light),
+                resources.getColor(android.R.color.holo_orange_dark),
+                resources.getColor(android.R.color.holo_orange_light),
+                resources.getColor(android.R.color.holo_purple),
+                resources.getColor(android.R.color.holo_red_dark),
+                resources.getColor(android.R.color.holo_red_light)
+        };
     }
 
 }
