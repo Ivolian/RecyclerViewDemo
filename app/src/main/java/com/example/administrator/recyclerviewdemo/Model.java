@@ -1,7 +1,9 @@
 package com.example.administrator.recyclerviewdemo;
 
 
-public class Model {
+import java.io.Serializable;
+
+public class Model implements Serializable {
 
     private int color;
 
